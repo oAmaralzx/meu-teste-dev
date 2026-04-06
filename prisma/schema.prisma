@@ -14,6 +14,7 @@ model Tenant {
   name  String
   users User[]
   tasks Task[]
+  subtasks Subtask[]
 }
 
 // Tabela de Usuários
@@ -31,4 +32,22 @@ model Task {
   title     String
   tenantId  String
   tenant    Tenant @relation(fields: [tenantId], references: [id])
+  subtasks  Subtask[]
+
+  @@unique([id, tenantId])
+}
+
+// Subtarefas de uma Task (isoladas por tenant)
+model Subtask {
+  id        String @id @default(uuid())
+  title     String
+  done      Boolean @default(false)
+  taskId    String
+  tenantId  String
+
+  // Garante que a subtarefa pertence ao mesmo tenant da task pai
+  task      Task   @relation(fields: [taskId, tenantId], references: [id, tenantId])
+  tenant    Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([taskId, tenantId])
 }
