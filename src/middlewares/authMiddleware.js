@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'sua_chave_secreta_aqui';
+const JWT_SECRET = 'cristiano_ronaldo_7';
 
 const authenticate = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1]; // Pega o token do Header "Bearer TOKEN"
