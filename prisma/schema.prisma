@@ -1,0 +1,34 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+// Mantenha o restante dos models (Tenant, User, Task) como estão
+
+// Tabela de Empresas (Os Tenants)
+model Tenant {
+  id    String @id @default(uuid())
+  name  String
+  users User[]
+  tasks Task[]
+}
+
+// Tabela de Usuários
+model User {
+  id        String @id @default(uuid())
+  email     String @unique
+  password  String
+  tenantId  String
+  tenant    Tenant @relation(fields: [tenantId], references: [id])
+}
+
+// Tabela CRUD (Exemplo: Tarefas)
+model Task {
+  id        String @id @default(uuid())
+  title     String
+  tenantId  String
+  tenant    Tenant @relation(fields: [tenantId], references: [id])
+}
